@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:skia="clr-namespace:SkiaSharp.Views.Forms;assembly=SkiaSharp.Views.Forms"
+             x:Class="IteractiveMap.MainPage"
+             Background="White">
+    <StackLayout BackgroundColor="White">
+        <StackLayout.GestureRecognizers>
+            <PinchGestureRecognizer PinchUpdated="PinchGestureRecognizer_PinchUpdated" />
+            <PanGestureRecognizer PanUpdated="PanGestureRecognizer_PanUpdated" />
+            <TapGestureRecognizer x:Name="PlaceTapGestureRecognizer" Tapped="TapGestureRecognizer_Tapped"/>
+        </StackLayout.GestureRecognizers>
+        <skia:SKCanvasView x:Name="PlaceCanvasView" PaintSurface="OnCanvasViewPaintSurface" VerticalOptions="FillAndExpand"/>
+        <SearchBar x:Name="PlaceSearchBar" TextChanged="PlaceSearchBar_TextChanged" BackgroundColor="DodgerBlue" Placeholder="Напишите что-нибудь!"/>
+    </StackLayout>
+</ContentPage>
