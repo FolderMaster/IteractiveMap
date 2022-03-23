@@ -1,14 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using SkiaSharp;
 
-namespace IteractiveMap
+namespace IteractiveMap.Model
 {
     class Place
     {
-        public override string ToString()
+        public Place(string name, string adress, string phonenumber, string[] links, SKPath region)
         {
-            return Name;
+            Name = name;
+            Adress = adress;
+            Links = links;
+            PhoneNumber = phonenumber;
+            Region = region;
         }
 
         public string Name
@@ -23,26 +28,19 @@ namespace IteractiveMap
             set;
         }
 
-        public Point Point1
-        {
-            get;
-            set;
-        }
-        public Point Point2
-        {
-            get;
-            set;
-        }
-    }
-    class Point
-    {
-        public double X
+        public string PhoneNumber
         {
             get;
             set;
         }
 
-        public double Y
+        public string[] Links
+        {
+            get;
+            set;
+        }
+
+        public SKPath Region
         {
             get;
             set;
