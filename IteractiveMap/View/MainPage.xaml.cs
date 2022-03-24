@@ -12,6 +12,8 @@ using Xamarin.Forms;
 using SkiaSharp;
 using SkiaSharp.Views.Forms;
 
+using Xamarin.Forms.Maps;
+
 using IteractiveMap.Model;
 namespace IteractiveMap.View
 {
@@ -45,42 +47,6 @@ namespace IteractiveMap.View
             return base.OnBackButtonPressed();
         }
 
-        private void PinchGestureRecognizer_PinchUpdated(object sender, PinchGestureUpdatedEventArgs e)
-        {
-            switch (e.Status)
-            {
-                case GestureStatus.Started:
-                    break;
-                case GestureStatus.Running:
-                    _scale += (e.Scale - 1) * _scale;
-                    _scale = Math.Max(0.00000001, _scale);
-                    _canvasView.InvalidateSurface();
-                    _searchBar.Text = "scale:" + _scale.ToString();
-                    break;
-                case GestureStatus.Completed:
-                    _searchBar.Text = null;
-                    break;
-            }
-        }
-
-        private void PanGestureRecognizer_PanUpdated(object sender, PanUpdatedEventArgs e)
-        {
-            switch (e.StatusType)
-            {
-                case GestureStatus.Started:
-                    break;
-                case GestureStatus.Running:
-                    _x += e.TotalX / _scale;
-                    _y += e.TotalY / _scale;
-                    _canvasView.InvalidateSurface();
-                    _searchBar.Text = "x:" + _x.ToString() + "\ty:" + _y.ToString();
-                    break;
-                case GestureStatus.Completed:
-                    _searchBar.Text = null;
-                    break;
-            }
-        }
-
         private void _contentView_Tapped(object sender, MR.Gestures.TapEventArgs e)
         {
             if (e.Touches != null && e.Touches.Length > 0)
@@ -88,14 +54,6 @@ namespace IteractiveMap.View
                 Point Touch = e.Touches.First();
                 _searchBar.Text = "x:" + Touch.X.ToString() + "\ty:" + Touch.Y.ToString();
             }
-        }
-
-        private void _contentView_Pinched(object sender, MR.Gestures.PinchEventArgs e)
-        {
-        }
-
-        private void _contentView_Panned(object sender, MR.Gestures.PanEventArgs e)
-        {
         }
 
         private void _searchBar_Focused(object sender, FocusEventArgs e)
@@ -196,6 +154,11 @@ namespace IteractiveMap.View
                     });
                 }
             }
+        }
+
+        private void Map_MapClicked(object sender, Xamarin.Forms.Maps.MapClickedEventArgs e)
+        {
+
         }
 
         private void OnCanvasViewPaintSurface(object sender, SKPaintSurfaceEventArgs args)
