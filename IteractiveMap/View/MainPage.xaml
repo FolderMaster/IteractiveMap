@@ -1,20 +1,21 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:mr="clr-namespace:MR.Gestures;assembly=MR.Gestures"
              xmlns:skia="clr-namespace:SkiaSharp.Views.Forms;assembly=SkiaSharp.Views.Forms"
              x:Class="IteractiveMap.View.MainPage"
              Background="White">
     <StackLayout x:Name="_stackLayout" Spacing="0">
-        <ContentView x:Name="_contentView" BackgroundColor="White" VerticalOptions="FillAndExpand">
+        <mr:ContentView x:Name="_contentView" BackgroundColor="White" VerticalOptions="FillAndExpand" Tapped="_contentView_Tapped" Pinched="_contentView_Pinched" Panned="_contentView_Panned">
             <ContentView.GestureRecognizers>
                 <PinchGestureRecognizer PinchUpdated="PinchGestureRecognizer_PinchUpdated" />
                 <PanGestureRecognizer PanUpdated="PanGestureRecognizer_PanUpdated" />
-                <TapGestureRecognizer x:Name="_tapGestureRecognizer" Tapped="TapGestureRecognizer_Tapped"/>
             </ContentView.GestureRecognizers>
             <skia:SKCanvasView x:Name="_canvasView" PaintSurface="OnCanvasViewPaintSurface" VerticalOptions="FillAndExpand"/>
-        </ContentView>
+        </mr:ContentView>
         <StackLayout x:Name="_searchstackLayout" Spacing="0">
             <SearchBar x:Name="_searchBar" Focused="_searchBar_Focused" Unfocused="_searchBar_Unfocused" TextChanged="_searchBar_TextChanged" SearchButtonPressed="_searchBar_SearchButtonPressed" BackgroundColor="DodgerBlue" Placeholder="Напишите что-нибудь!"/>
         </StackLayout>
+        <StackLayout x:Name="_infoStackLayout" Spacing="0" BackgroundColor="White"/>
     </StackLayout>
 </ContentPage>

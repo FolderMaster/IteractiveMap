@@ -7,10 +7,11 @@ namespace IteractiveMap.Model
 {
     class Place
     {
-        public Place(string name, string adress, string phonenumber, string[] links, SKPath region)
+        public Place(string name, string adress, PlaceType type, string phonenumber, string[] links, SKPoint[] region)
         {
             Name = name;
             Adress = adress;
+            Type = type;
             Links = links;
             PhoneNumber = phonenumber;
             Region = region;
@@ -28,6 +29,12 @@ namespace IteractiveMap.Model
             set;
         }
 
+        public PlaceType Type
+        {
+            get;
+            set;
+        }
+
         public string PhoneNumber
         {
             get;
@@ -40,7 +47,7 @@ namespace IteractiveMap.Model
             set;
         }
 
-        public SKPath Region
+        public SKPoint[] Region
         {
             get;
             set;

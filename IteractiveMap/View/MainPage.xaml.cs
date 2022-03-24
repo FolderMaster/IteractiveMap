@@ -23,17 +23,17 @@ namespace IteractiveMap.View
         ObservableCollection<Place> _places = new ObservableCollection<Place>();
 
         ListView _listView = null;
-        StackLayout _infoStackLayout = null;
-
+        
         public MainPage()
         {
             InitializeComponent();
-            _places.Add(new Place("Дом Колотушкина", "улица Пушкина, дом Колотушкина", "+877777777", null, new SKPath()));
-            _places.Add(new Place("Дом Пушкина", "улица Пушкина, дом Пушкина", "+877777777", new string[2] {"VK", "KALL"}, new SKPath()));
+            _places.Add(new Place("Дом Колотушкина", "улица Пушкина, дом Колотушкина", PlaceType.Creativity, "+877777777", null, new SKPoint[] { new SKPoint(0, 0), new SKPoint(0, 200), new SKPoint(200, 200), new SKPoint(200, 0) }));
+            _places.Add(new Place("Дом Пушкина", "улица Пушкина, дом Пушкина", PlaceType.Sport, "+877777777", new string[] {"VK", "KALL"}, new SKPoint[] { new SKPoint(400, 400), new SKPoint(400, 800), new SKPoint(500, 800), new SKPoint(500, 400) }));
         }
 
         protected override void OnAppearing()
         {
+            
         }
 
         protected override void OnDisappearing()
@@ -70,8 +70,8 @@ namespace IteractiveMap.View
                 case GestureStatus.Started:
                     break;
                 case GestureStatus.Running:
-                    _x += e.TotalX * _scale;
-                    _y += e.TotalY * _scale;
+                    _x += e.TotalX / _scale;
+                    _y += e.TotalY / _scale;
                     _canvasView.InvalidateSurface();
                     _searchBar.Text = "x:" + _x.ToString() + "\ty:" + _y.ToString();
                     break;
@@ -81,7 +81,20 @@ namespace IteractiveMap.View
             }
         }
 
-        private void TapGestureRecognizer_Tapped(object sender, EventArgs e)
+        private void _contentView_Tapped(object sender, MR.Gestures.TapEventArgs e)
+        {
+            if (e.Touches != null && e.Touches.Length > 0)
+            {
+                Point Touch = e.Touches.First();
+                _searchBar.Text = "x:" + Touch.X.ToString() + "\ty:" + Touch.Y.ToString();
+            }
+        }
+
+        private void _contentView_Pinched(object sender, MR.Gestures.PinchEventArgs e)
+        {
+        }
+
+        private void _contentView_Panned(object sender, MR.Gestures.PanEventArgs e)
         {
         }
 
@@ -139,42 +152,19 @@ namespace IteractiveMap.View
 
         private void _listView_ItemSelected(object sender, SelectedItemChangedEventArgs e)
         {
-            if(_infoStackLayout == null)
-            {
-                Create_infoStackLayout((Place)e.SelectedItem);
-                _stackLayout.Children.Add(_infoStackLayout);
-            }
-            else
-            {
-                _stackLayout.Children.Remove(_infoStackLayout);
-                Create_infoStackLayout((Place)e.SelectedItem);
-                _stackLayout.Children.Add(_infoStackLayout);
-            }
+            Create_infoStackLayout((Place)e.SelectedItem);
             _searchBar.Unfocus();
         }
 
         private void _listView_ItemTapped(object sender, ItemTappedEventArgs e)
         {
-            if (_infoStackLayout == null)
-            {
-                Create_infoStackLayout((Place)e.Item);
-                _stackLayout.Children.Add(_infoStackLayout);
-            }
-            else
-            {
-                _stackLayout.Children.Remove(_infoStackLayout);
-                Create_infoStackLayout((Place)e.Item);
-                _stackLayout.Children.Add(_infoStackLayout);
-            }
+            Create_infoStackLayout((Place)e.Item);
             _searchBar.Unfocus();
         }
 
         private void Create_infoStackLayout(Place place)
         {
-            _infoStackLayout = new StackLayout()
-            {
-                BackgroundColor = Color.White,
-            };
+            _infoStackLayout.Children.Clear();
             _infoStackLayout.Children.Add(new Label()
             {
                 TextColor = Color.Black,
@@ -185,7 +175,7 @@ namespace IteractiveMap.View
             _infoStackLayout.Children.Add(new Label()
             {
                 TextColor = Color.Black,
-                HorizontalTextAlignment = TextAlignment.End,
+                HorizontalTextAlignment = TextAlignment.Start,
                 Text = place.Adress
             });
             _infoStackLayout.Children.Add(new Label()
@@ -217,13 +207,34 @@ namespace IteractiveMap.View
             SKPaint paint = new SKPaint
             {
                 Style = SKPaintStyle.Fill,
-                Color = Color.Blue.ToSKColor(),
-                StrokeWidth = (float)_scale * 10
+                StrokeWidth = 1
             };
             canvas.Clear();
             for(int n = 0; n < _places.Count; ++n)
             {
-                canvas.DrawPath(_places[n].Region, paint);
+                SKPoint[] points = new SKPoint[_places[n].Region.Length];
+                for(int h = 0; h < points.Length; ++h)
+                {
+                    points[h] = new SKPoint((float)((_x + _places[n].Region[h].X) * _scale), (float)((_y + _places[n].Region[h].Y) * _scale));
+                }
+                SKPath region = new SKPath();
+                region.AddPoly(points);
+                switch(_places[n].Type)
+                {
+                    case PlaceType.None:
+                        paint.Color = Color.White.ToSKColor();
+                        break;
+                    case PlaceType.Creativity:
+                        paint.Color = Color.Green.ToSKColor();
+                        break;
+                    case PlaceType.Self_development:
+                        paint.Color = Color.Yellow.ToSKColor();
+                        break;
+                    case PlaceType.Sport:
+                        paint.Color = Color.Aqua.ToSKColor();
+                        break;
+                }
+                canvas.DrawPath(region, paint);
             }
         }
     }
