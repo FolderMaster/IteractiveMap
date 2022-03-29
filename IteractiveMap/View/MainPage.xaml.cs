@@ -81,21 +81,9 @@ namespace IteractiveMap.View
             }
         }
 
-        private void _contentView_Tapped(object sender, MR.Gestures.TapEventArgs e)
+        private void TapGestureRecognizer_Tapped(object sender, EventArgs e)
         {
-            if (e.Touches != null && e.Touches.Length > 0)
-            {
-                Point Touch = e.Touches.First();
-                _searchBar.Text = "x:" + Touch.X.ToString() + "\ty:" + Touch.Y.ToString();
-            }
-        }
-
-        private void _contentView_Pinched(object sender, MR.Gestures.PinchEventArgs e)
-        {
-        }
-
-        private void _contentView_Panned(object sender, MR.Gestures.PanEventArgs e)
-        {
+            _searchBar.Text = e.ToString();
         }
 
         private void _searchBar_Focused(object sender, FocusEventArgs e)
